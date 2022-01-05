@@ -11,9 +11,10 @@ function asyncRequest(resource, callback, resources = DEFAULT_RESOURCES) {
 
 	var randomDelay = Math.round(Math.random() * RANDOM_DELAY) + MIN_DELAY;
 
-	console.log("Requesting: " + resource);
+	console.log("**Requesting: " + resource + "**");
 
 	setTimeout(function(){
+		console.log("**Returning: " + resources[resource] + "**");
 		callback(resources[resource]);
 	},randomDelay);
 }

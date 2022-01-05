@@ -4,20 +4,23 @@ function createPromise(asyncOperation, ...params) {
 
   let obtained = false;
   let value = false;
+  let callbacks = [];
+
+  asyncOperation(...params, (operationReturn) => {
+    if(obtained) return;
+
+    value = operationReturn;
+    obtained = true;
+    callbacks.forEach( callback => callback(value) );
+  })
 
   return {
-    then: function(callback) {
-
+    onDone: function(getValue) {
       if(obtained) {
-        callback(value);
+        getValue(value);
       } else {
-        asyncOperation(...params, (operationReturn) => {
-          value = operationReturn;
-          obtained = true;
-          callback(value);
-        })
+        callbacks.push(getValue)
       }
-
     }
   }
 }
@@ -25,9 +28,9 @@ function createPromise(asyncOperation, ...params) {
 
 let resource1 = createPromise(asyncRequest, 'resource1');
 
-resource1.then(
+resource1.onDone(
   (value) => console.log(`Obtained "${value}"`)
 )
-resource1.then(
+resource1.onDone(
   (value) => console.log(`Obtained "${value}"`)
 )
