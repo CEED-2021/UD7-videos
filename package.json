@@ -1,0 +1,14 @@
+{
+  "name": "ud7-videos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:CEED-2021/UD7-videos.git",
+  "author": "Alvaro Maceda <alvaro@alvaromaceda.es>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}
