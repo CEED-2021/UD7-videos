@@ -4,32 +4,68 @@ function getResource(resource) {
   return new Promise((resolve, reject) => asyncRequest(resource, resolve) )
 }
 
-// ------------------------------------------
-// The output of a "then" manager should be a promise
-// ------------------------------------------
+// ------------------------------------------------------
+// With callbacks
+// ------------------------------------------------------
+asyncRequest('resource1', (data) => {
+  console.log(`obtained ${data}`);
+  asyncRequest('resource2', (data) => {
+    console.log(`obtained ${data}`);
+    asyncRequest('resource3', (data) => {
+      console.log(`obtained ${data}`);
+      console.log('all operations finished');
+    })
+  })
+})
+
+// ------------------------------------------------------
+// With promises, naïve version (don't do this at home)
+// ------------------------------------------------------
 getResource('resource1')
-.then( () => {
+.then( (data) => {
+  console.log(`obtained ${data}`);
+  getResource('resource2').then( (data) => {
+    console.log(`obtained ${data}`);
+    getResource('resource3').then((data) => {
+      console.log(`obtained ${data}`);
+      console.log('all operations finished');
+    })
+  })
+})
+
+
+// ------------------------------------------------------
+// The output "goes" to the next then
+// ------------------------------------------------------
+getResource('resource1')
+.then( (data) => {
+  console.log(`obtained ${data}`);
   return getResource('resource2')
 })
-.then( () => {
+.then( (data) => {
+  console.log(`obtained ${data}`);
   return getResource('resource3')
 })
-.then( () => {
+.then( (data) => {
+  console.log(`obtained ${data}`);
   console.log('All operations finished')
 })
 
 
-// ------------------------------------------
-// This won't work as expected
-// ------------------------------------------
+// ------------------------------------------------------
+// You must return the value. This won't work as expected
+// ------------------------------------------------------
 getResource('resource1')
-.then( () => {
+.then( (data) => {
+  console.log(`obtained ${data}`);
   getResource('resource2')
 })
-.then( () => {
+.then( (data) => {
+  console.log(`obtained ${data}`);
   getResource('resource3')
 })
-.then( () => {
+.then( (data) => {
+  console.log(`obtained ${data}`);
   console.log('All operations finished')
 })
 
@@ -39,22 +75,17 @@ getResource('resource1')
 // ------------------------------------------
 getResource('resource1')
 .then( (data) => {
-  console.log(`Resource 1 is obtained: ${data}`);
-  return `++${data}++`;
+  console.log(`obtained ${data}`);
+  // This will return a fulfilled promise with value 'banana'
+  return 'banana';
 })
 .then( (data) => {
-  console.log(`Formated data obtained: ${data}`)
+  // This will execute inmediatly after "return 'banana'"
+  console.log(`obtained ${data}`);
+  return 'papaya';
 })
-
-
-
-
-// getResource('resource1')
-// .then( (data) => {
-//   console.log(`The resource 1 is ${data}`)
-//   return getResource('resource2')
-// })
-// .then( (data) => {
-//   console.log(`The resource 3 is ${data}`)
-//   return getResource('resource3')
-// })
+.then( (data) => {
+  // This will execute inmediatly after "return 'papaya'"
+  console.log(`obtained ${data}`);
+  console.log('all operations finished');
+})
