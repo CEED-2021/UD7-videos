@@ -34,12 +34,12 @@ try {
 // So the callback must receive the error somehow
 // -------------------------------------------------------------
 
-function asyncIWouldntDoThisToo(callback) {
+function asyncIWouldntDoThisEither(callback) {
   setTimeout(() => callback("It's the third time I tell it to you"), 100)
   setTimeout(() => callback(null, "But here you have some data"), 500)
 }
 
-asyncIWouldntDoThisToo( (error, data) => {
+asyncIWouldntDoThisEither( (error, data) => {
   if(error) {
     console.log(`Something went wrong: ${error}`);
     return;
