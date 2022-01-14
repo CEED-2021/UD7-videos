@@ -3,7 +3,7 @@ function asyncThing() {
 }
 
 // -------------------------------------------------------------------------
-// You can return a rejected promise anywhere in the chain
+// You can return a catch an error anywhere in the chain
 // -------------------------------------------------------------------------
 asyncThing()
 .then( (data) => {
