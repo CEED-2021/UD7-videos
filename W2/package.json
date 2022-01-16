@@ -9,5 +9,7 @@
   "devDependencies": {
     "jest": "^27.4.7"
   },
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "2"
+  }
 }
