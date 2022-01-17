@@ -1,11 +1,8 @@
-const { fetchInModule } = require('./fetch_module')
+jest.mock('node-fetch');
+const fetch = require('node-fetch')
+const getPokemon = require('./get_pokemon')
 
 describe('mocking fetch', () => {
-
-  beforeAll(() => {
-    // "global" is in node like "window" for the browsers
-    global.fetch = jest.fn();
-  })
 
   it('mocks fetch', async () => {
     fetch.mockResolvedValueOnce('default')
@@ -23,8 +20,16 @@ describe('mocking fetch', () => {
   });
 
   it('works in a module', async () => {
-    fetch.mockResolvedValue('banana')
-    let foo = await fetchInModule()
-    expect(foo).toBe('banana')
+
+    const response = {
+      status: 200,
+      json: () => {
+        return {name: 'ditto'}
+      }
+    }
+    fetch.mockResolvedValueOnce(response);
+
+    const pokemon = await getPokemon();
+    expect(pokemon.name).toBe('ditto')
   });
 });
